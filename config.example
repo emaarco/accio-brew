@@ -1,0 +1,4 @@
+REPO_URL=git@github.com:your-name/brewfiles.git
+BREWFILE_PATH=./Brewfile
+SYNC_MODE=wrapper
+HOST_ID=your-macbook
