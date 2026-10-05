@@ -1,0 +1,34 @@
+#!/bin/bash
+set -u
+
+resolve_tool_root() {
+  local script=$0 link
+  while link=$(readlink "$script"); do
+    case $link in
+      /*) script=$link ;;
+      *) script=$(dirname "$script")/$link ;;
+    esac
+  done
+  cd "$(dirname "$script")/.." && pwd
+}
+
+usage() {
+  echo "usage: accio-brew init [--repo-url <url>] [--mode wrapper|launchd] | sync | apply [--cleanup] | teardown" >&2
+  exit 1
+}
+
+TOOL_ROOT=${ACCIO_BREW_ROOT:-$(resolve_tool_root)}
+for library in "$TOOL_ROOT"/lib/*.sh; do
+  source "$library"
+done
+
+case ${1:-} in
+  init)
+    shift
+    command_init "$@"
+    ;;
+  sync) command_sync ;;
+  apply) command_apply "${2:-}" ;;
+  teardown) command_teardown ;;
+  *) usage ;;
+esac

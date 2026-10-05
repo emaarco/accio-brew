@@ -1,0 +1,25 @@
+#!/bin/bash
+echo "$*" >> "$HOME/brew.calls"
+
+for argument; do
+  case $argument in
+    --file=*) file=${argument#--file=} ;;
+  esac
+done
+
+leave_lingering_child() {
+  [ -n "${FAKE_LINGERING_SECONDS:-}" ] || return 0
+  sleep "$FAKE_LINGERING_SECONDS" >/dev/null 2>&1 &
+}
+
+case "$1 $2" in
+  "bundle dump")
+    sleep "${FAKE_DUMP_SECONDS:-0}"
+    cp "$FAKE_INSTALLED" "$file"
+    leave_lingering_child
+    ;;
+  "bundle install")
+    cp "$file" "$HOME/installed.target"
+    exit "${FAKE_INSTALL_EXIT:-0}"
+    ;;
+esac
