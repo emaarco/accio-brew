@@ -61,7 +61,7 @@ test_propose_again_keeps_single_pull_request() {
   assert_exit 0 propose
   set_installed git jq
   assert_exit 0 propose
-  assert_eq 1 "$(gh_calls | grep -c "pr create")"
+  assert_eq 1 "$(gh_calls | grep -c "pr create .*--head propose/a")"
   assert_contains "Updated the open pull request" "$(last_output)"
 }
 
@@ -69,5 +69,29 @@ test_propose_again_keeps_single_merge_request() {
   given_initialised_host_on gitlab.com
   assert_exit 0 propose
   assert_exit 0 propose
-  assert_eq 1 "$(glab_calls | grep -c "mr create")"
+  assert_eq 1 "$(glab_calls | grep -c "mr create --source-branch propose/a")"
+}
+
+test_sync_opens_pull_request_on_github() {
+  given_initialised_host_on github.com
+  assert_contains "pr create --base main --head sync/a --title chore: record packages of a" "$(gh_calls)"
+}
+
+test_sync_opens_merge_request_on_gitlab() {
+  given_initialised_host_on gitlab.com
+  assert_contains "mr create --source-branch sync/a --target-branch main --title chore: record packages of a" "$(glab_calls)"
+}
+
+test_sync_again_keeps_single_pull_request() {
+  given_initialised_host_on github.com
+  set_installed git jq
+  assert_exit 0 sync
+  assert_eq 1 "$(gh_calls | grep -c "pr create .*--head sync/a")"
+}
+
+test_sync_reports_failed_pull_request() {
+  given_reachable_repo_on github.com
+  given_platform_clis_are_installed
+  FAKE_PR_CREATE_EXIT=1 assert_exit 1 init_on github.com
+  assert_contains "request-failed" "$(last_output)"
 }

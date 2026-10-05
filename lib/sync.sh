@@ -5,60 +5,64 @@ wait_for_other_syncs() {
   /usr/bin/lockf 9 || fail "cannot lock $lock_file"
 }
 
-remote_host_branch_is_known() {
-  git_in_clone rev-parse -q --verify "refs/remotes/origin/$HOST_BRANCH" >/dev/null
+fetch_remote_state() {
+  git_in_clone fetch -q --prune origin 2>/dev/null
 }
 
-checkout_host_branch() {
-  [ "$(git_in_clone symbolic-ref --short -q HEAD)" = "$HOST_BRANCH" ] && return
-  if remote_host_branch_is_known; then
-    git_in_clone checkout -q -f -B "$HOST_BRANCH" "origin/$HOST_BRANCH"
-  else
-    git_in_clone switch -q --orphan "$HOST_BRANCH"
-  fi
+resolve_target_branch() {
+  local remote_target_branch
+  remote_target_branch=$(default_branch) || fail "cannot determine the default branch of $REPO_URL"
+  target_branch=${remote_target_branch#origin/}
+}
+
+checkout_sync_branch() {
+  git_in_clone checkout -q -f -B "$SYNC_BRANCH" "origin/$target_branch"
 }
 
 update_host_brewfile() {
   local dump
   dump=$(mktemp)
   if dump_installed_packages "$dump"; then
-    mkdir -p "$(dirname "$CLONE/$BREWFILE")"
-    mv "$dump" "$CLONE/$BREWFILE"
+    mkdir -p "$(dirname "$CLONE/$HOST_FILE")"
+    mv "$dump" "$CLONE/$HOST_FILE"
   else
     rm -f "$dump"
     return 1
   fi
 }
 
-commit_if_changed() {
-  git_in_clone add -- "$BREWFILE"
-  if git_in_clone diff --cached --quiet; then
+host_file_is_unchanged() {
+  git_in_clone add -- "$HOST_FILE"
+  git_in_clone diff --cached --quiet
+}
+
+tree_of() {
+  git_in_clone rev-parse -q --verify "$1^{tree}"
+}
+
+sync_branch_is_pushed() {
+  [ "$(tree_of HEAD)" = "$(tree_of "refs/remotes/origin/$SYNC_BRANCH")" ]
+}
+
+push_sync_branch() {
+  if sync_branch_is_pushed; then
+    log unmerged
+    return
+  fi
+  git_in_clone push -q --force origin "$SYNC_BRANCH" 2>/dev/null || stop_sync_because push-failed
+  log pushed
+}
+
+request_host_file_change() {
+  local title="chore: record packages of $HOST_ID"
+  if host_file_is_unchanged; then
     log no-change
     return
   fi
-  git_as_tool -C "$CLONE" commit -q -m "sync($HOST_ID): $(utc_now)" && log committed
-}
-
-host_branch_is_pushed() {
-  local local_head
-  local_head=$(git_in_clone rev-parse -q --verify HEAD) || return 0
-  [ "$local_head" = "$(git_in_clone rev-parse -q --verify "refs/remotes/origin/$HOST_BRANCH")" ]
-}
-
-push_host_branch() {
-  local push_output
-  host_branch_is_pushed && return
-  if push_output=$(LC_ALL=C git_in_clone push -q -u origin "$HOST_BRANCH" 2>&1); then
-    log pushed
-    return
-  fi
-  case $push_output in
-    *'! [rejected]'*)
-      log diverged
-      exit 1
-      ;;
-  esac
-  log push-failed
+  git_as_tool -C "$CLONE" commit -q -m "$title"
+  push_sync_branch
+  REQUEST_BRANCH=$SYNC_BRANCH
+  open_request "$CLONE" "$title" "Installed packages on $HOST_ID." || stop_sync_because request-failed
 }
 
 stop_sync_because() {
@@ -73,9 +77,10 @@ command_sync() {
   wait_for_other_syncs
   log start
   ensure_clone || stop_sync_because clone-failed
-  checkout_host_branch
+  fetch_remote_state || stop_sync_because fetch-failed
+  resolve_target_branch
+  checkout_sync_branch
   update_host_brewfile || stop_sync_because dump-failed
-  commit_if_changed
-  push_host_branch
+  request_host_file_change
   log "done $((SECONDS - started_at))s"
 }
