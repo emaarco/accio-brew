@@ -43,11 +43,11 @@ Repository (owner/name):
 
 1. checks that the repo is reachable without a password prompt,
 2. creates `main` with an empty Brewfile if the repo is empty,
-3. pushes this Mac's first dump to `hosts/<host-id>`,
+3. pushes this Mac's first dump as `sync/<host-id>` and requests it as `hosts/<host-id>/Brewfile`,
 4. installs a launchd agent that syncs every hour and at login,
-5. proposes this Mac's packages as `propose/<host-id>` while the target Brewfile is still empty, and opens the pull request for it on github.com and gitlab.com.
+5. proposes this Mac's packages as `propose/<host-id>` while the target Brewfile is still empty.
 
-Merge that request and `main` holds your first target. Later packages travel the same way with `accio-brew propose`.
+On github.com and gitlab.com both requests are opened for you. Merge them and `main` holds this Mac's inventory and your first target. Later packages travel the same way with `accio-brew propose`.
 
 Self-hosted server? Choose `paste clone URL`.
 
@@ -62,7 +62,7 @@ accio-brew apply
 
 ## Background authentication
 
-Syncs run unattended and never prompt. `init` only accepts a repo URL that already works that way.
+Syncs run unattended and never prompt. `init` only accepts a repo URL that already works that way. On github.com and gitlab.com the sync also calls `gh` or `glab`, which must stay logged in.
 
 - **HTTPS** → credentials in the macOS keychain (`git config --global credential.helper osxkeychain`).
 - **SSH** → a key that loads without a prompt: `UseKeychain yes` and `AddKeysToAgent yes` in `~/.ssh/config`, then `ssh-add --apple-use-keychain <key>` once. Agents that ask for a fingerprint on every use make background syncs fail.
@@ -70,5 +70,5 @@ Syncs run unattended and never prompt. `init` only accepts a repo URL that alrea
 ## Changing things later
 
 - **Other repo** → `accio-brew init` again. Enter keeps the current value.
-- **Brewfile location inside the repo** → edit `BREWFILE_PATH` in `~/.config/accio-brew/config`.
-- **Stop using it** → `accio-brew teardown`, `brew uninstall accio-brew`, then delete `~/.local/share/accio-brew`, `~/.config/accio-brew` and your `hosts/<host-id>` and `propose/<host-id>` branches.
+- **Target Brewfile location inside the repo** → edit `BREWFILE_PATH` in `~/.config/accio-brew/config`. Host files stay in `hosts/<host-id>/Brewfile`.
+- **Stop using it** → `accio-brew teardown`, `brew uninstall accio-brew`, then delete `~/.local/share/accio-brew`, `~/.config/accio-brew`, your `sync/<host-id>` and `propose/<host-id>` branches and `hosts/<host-id>/` on `main`.

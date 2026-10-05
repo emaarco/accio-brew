@@ -13,21 +13,21 @@ packages_missing_in() {
   local target=$1/$BREWFILE
   mkdir -p "$(dirname "$target")"
   touch "$target"
-  grep -vxFf "$target" "$CLONE/$BREWFILE"
+  grep -vxFf "$target" "$CLONE/$HOST_FILE"
 }
 
 push_proposal() {
   local checkout=$1 quiet=
   [ -z "$(platform_cli)" ] || quiet=-q
-  git -C "$checkout" switch -q -c "$PROPOSAL_BRANCH"
+  git -C "$checkout" switch -q -c "$REQUEST_BRANCH"
   git -C "$checkout" add -- "$BREWFILE"
   git_as_tool -C "$checkout" commit -q -m "feat: add packages from $HOST_ID"
-  git -C "$checkout" push $quiet --force origin "$PROPOSAL_BRANCH" || fail "cannot push $PROPOSAL_BRANCH to $REPO_URL"
+  git -C "$checkout" push $quiet --force origin "$REQUEST_BRANCH" || fail "cannot push $REQUEST_BRANCH to $REPO_URL"
 }
 
 propose_missing_packages() {
   local checkout=$1 missing
-  PROPOSAL_BRANCH=propose/$HOST_ID
+  REQUEST_BRANCH=propose/$HOST_ID
   missing=$(packages_missing_in "$checkout")
   if [ -z "$missing" ]; then
     echo "Nothing to propose."

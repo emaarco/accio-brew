@@ -41,8 +41,16 @@ remote_commit_count() {
   git -C "$REMOTE" rev-list --count "$1"
 }
 
+remote_host_file() {
+  git -C "$REMOTE" show "sync/$1:hosts/$1/Brewfile"
+}
+
+merge_sync_request() {
+  git -C "$REMOTE" update-ref refs/heads/main "refs/heads/sync/$1"
+}
+
 last_remote_commit() {
-  git -C "$REMOTE" log -1 --format="$1" hosts/a
+  git -C "$REMOTE" log -1 --format="$1" sync/a
 }
 
 publish_file() {

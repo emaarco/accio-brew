@@ -53,12 +53,12 @@ test_propose_again_replaces_unmerged_proposal() {
 test_propose_asks_for_merge_request_on_other_hosts() {
   given_initialised_host
   assert_exit 0 propose
-  assert_contains "Open a merge request into main" "$(last_output)"
+  assert_contains "Open a merge request from propose/a into main" "$(last_output)"
 }
 
 test_propose_fails_when_default_branch_is_unknown() {
   git init -q --bare -b master "$REMOTE"
-  assert_exit 0 init_with_flags
+  assert_exit 1 init_with_flags
   assert_exit 1 propose
   assert_contains "cannot determine the default branch" "$(last_output)"
 }

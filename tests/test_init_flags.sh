@@ -25,7 +25,7 @@ test_init_links_binary() {
 
 test_init_pushes_first_dump() {
   given_initialised_host
-  assert_eq 'brew "git"' "$(remote_file hosts/a)"
+  assert_eq 'brew "git"' "$(remote_host_file a)"
 }
 
 test_init_leaves_target_untouched() {

@@ -3,7 +3,7 @@ echo "$*" >> "$HOME/glab.calls"
 case "$1 $2" in
   "auth status") exit "${FAKE_CLI_AUTH_EXIT:-0}" ;;
   "mr list")
-    if grep -q "mr create" "$HOME/glab.calls"; then
+    if grep -q "mr create --source-branch $4 " "$HOME/glab.calls"; then
       echo '[{"iid":1}]'
     else
       echo '[]'

@@ -2,6 +2,9 @@
 echo "$*" >> "$HOME/gh.calls"
 case "$1 $2" in
   "auth status") exit "${FAKE_CLI_AUTH_EXIT:-0}" ;;
-  "pr list") grep -c "pr create" "$HOME/gh.calls" ;;
-  "pr create") echo https://github.com/acme/brewfiles/pull/1 ;;
+  "pr list") grep -c "pr create .*--head $4 " "$HOME/gh.calls" ;;
+  "pr create")
+    [ -z "${FAKE_PR_CREATE_EXIT:-}" ] || exit "$FAKE_PR_CREATE_EXIT"
+    echo https://github.com/acme/brewfiles/pull/1
+    ;;
 esac

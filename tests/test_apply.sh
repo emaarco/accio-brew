@@ -31,7 +31,7 @@ test_apply_syncs_afterwards() {
   given_initialised_host
   set_installed git jq
   assert_exit 0 apply
-  assert_contains 'brew "jq"' "$(remote_file hosts/a)"
+  assert_contains 'brew "jq"' "$(remote_host_file a)"
 }
 
 test_apply_rejects_unknown_option() {
@@ -53,7 +53,7 @@ test_apply_skips_cleanup_after_brew_failure() {
 
 test_apply_fails_when_default_branch_is_unknown() {
   git init -q --bare -b master "$REMOTE"
-  assert_exit 0 init_with_flags
+  assert_exit 1 init_with_flags
   assert_exit 1 apply
   assert_contains "cannot determine the default branch" "$(last_output)"
   assert_missing "$HOME/installed.target"

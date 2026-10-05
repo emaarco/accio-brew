@@ -7,15 +7,15 @@ test_init_seeds_empty_remote_with_empty_target() {
 test_init_pushes_first_dump_to_seeded_remote() {
   create_empty_remote "$REMOTE"
   assert_exit 0 init_with_flags
-  assert_eq 'brew "git"' "$(remote_file hosts/a)"
+  assert_eq 'brew "git"' "$(remote_host_file a)"
 }
 
-test_init_reuses_existing_host_branch_on_enter() {
+test_init_reuses_existing_host_id_on_enter() {
   given_initialised_host
   enter_home twin
   export FAKE_HOST=a
   assert_exit 0 init_with_flags
-  assert_contains "hosts/a exists" "$(last_output)"
+  assert_contains "a exists" "$(last_output)"
   assert_eq "a" "$(config_value HOST_ID)"
 }
 
@@ -39,7 +39,7 @@ test_init_again_with_new_repo_pushes_there() {
   given_initialised_host
   REMOTE=$SANDBOX/second.git
   given_initialised_host
-  assert_eq 'brew "git"' "$(remote_file hosts/a)"
+  assert_eq 'brew "git"' "$(remote_host_file a)"
 }
 
 test_init_again_with_new_repo_leaves_old_repo_alone() {
@@ -47,5 +47,5 @@ test_init_again_with_new_repo_leaves_old_repo_alone() {
   given_initialised_host
   REMOTE=$SANDBOX/second.git
   given_initialised_host
-  assert_eq 1 "$(git -C "$first_remote" rev-list --count hosts/a)"
+  assert_eq 2 "$(git -C "$first_remote" rev-list --count sync/a)"
 }

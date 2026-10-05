@@ -13,26 +13,25 @@ brew install emaarco/tap/accio-brew
 accio-brew init
 ```
 
-`init` asks where your Brewfile repo lives, pushes this Mac's first dump, proposes it as the first target and schedules the hourly sync. All you bring is an empty private repo — and `gh` or `glab`, logged in, when it lives on github.com or gitlab.com. → [Getting started](./docs/getting-started.md)
+`init` asks where your Brewfile repo lives, requests this Mac's first dump, proposes it as the first target and schedules the hourly sync. All you bring is an empty private repo — and `gh` or `glab`, logged in, when it lives on github.com or gitlab.com. → [Getting started](./docs/getting-started.md)
 
 The formula is served from the [`emaarco/homebrew-tap`](https://github.com/emaarco/homebrew-tap) repository.
 
 ## 🪄 The spell
 
-| Branch in your repo | Its `Brewfile` holds | Written by |
+| File on `main` | Holds | Changed by |
 |---|---|---|
-| `main` | the target: what a Mac *should* have | you, by merging the requests `propose` opens |
-| `propose/<host-id>` | the target plus what that Mac has on top | `accio-brew propose` on that Mac |
-| `hosts/<host-id>` | what that Mac *has* installed | accio-brew on that Mac, automatically |
+| `Brewfile` | the target: what a Mac *should* have | you, by merging the requests `propose` opens |
+| `hosts/<host-id>/Brewfile` | what that Mac *has* installed | you, by merging the requests the sync opens |
 
-Each Mac only pushes to its own branches — no conflicts between Macs, and `main` can stay protected. → [How it works](./docs/how-it-works.md)
+Each Mac only pushes to its own branches, `sync/<host-id>` and `propose/<host-id>` — no conflicts between Macs, and `main` can stay protected. → [How it works](./docs/how-it-works.md)
 
 ## 📜 Usage
 
 | Command | Does |
 |---|---|
 | `accio-brew init` | Guided setup. Cast it again to change the repo. |
-| `accio-brew sync` | Dump the installed packages and push them to `hosts/<host-id>`. |
+| `accio-brew sync` | Dump the installed packages and open a pull request that records them in `hosts/<host-id>/Brewfile`. |
 | `accio-brew propose` | Open a pull request that adds this Mac's extra packages to the target. |
 | `accio-brew apply` | Install everything from the target Brewfile on `main`. |
 | `accio-brew apply --cleanup` | Also uninstall what is not in the target — **without asking**. |
@@ -40,7 +39,7 @@ Each Mac only pushes to its own branches — no conflicts between Macs, and `mai
 
 ## ⏳ Trigger
 
-A launchd agent syncs every hour and at login, in the background.
+A launchd agent syncs every hour and at login, in the background. It opens a pull request only when this Mac's packages differ from its file on `main`.
 
 → [Troubleshooting](./docs/troubleshooting.md)
 
