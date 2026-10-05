@@ -14,6 +14,12 @@ test_plist_puts_brew_on_path() {
   assert_contains "<string>$TOOL_ROOT/tests/fakes:/usr/bin:/bin:/usr/sbin:/sbin</string>" "$(cat "$PLIST")"
 }
 
+test_plist_sends_only_errors_to_log_file() {
+  given_initialised_host
+  assert_not_contains "StandardOutPath" "$(cat "$PLIST")"
+  assert_contains "StandardErrorPath" "$(cat "$PLIST")"
+}
+
 test_init_loads_agent() {
   given_initialised_host
   assert_contains "bootstrap gui/$(id -u) $PLIST" "$(launchctl_calls)"

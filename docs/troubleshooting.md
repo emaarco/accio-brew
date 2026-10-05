@@ -1,6 +1,6 @@
 # Troubleshooting
 
-Syncs run in the background, so failures only show up in `~/Library/Logs/accio-brew.log`. Run `accio-brew sync` by hand to see the same events in your terminal.
+Syncs run in the background, so failures only show up in `~/Library/Logs/accio-brew.log`. Every sync is recorded there, also the ones `init`, `propose`, `apply` or you start by hand. Run `accio-brew sync` to see the same events in your terminal.
 
 | Event | Meaning | What to do |
 |---|---|---|

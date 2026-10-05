@@ -10,5 +10,5 @@ utc_now() {
 }
 
 log() {
-  printf '%s %s %s\n' "$(utc_now)" "$HOST_ID" "$*"
+  printf '%s %s %s\n' "$(utc_now)" "$HOST_ID" "$*" | tee -a "$LOG_FILE"
 }
