@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/emaarco/accio-brew/compare/v1.2.1...v1.3.0) (2026-10-05)
+
+
+### Features
+
+* propose packages for the target as a pull request ([#14](https://github.com/emaarco/accio-brew/issues/14)) ([8a855c2](https://github.com/emaarco/accio-brew/commit/8a855c2cde2f71aef2d1d6bfe47cf623c19f48be))
+
 ## [1.2.1](https://github.com/emaarco/accio-brew/compare/v1.2.0...v1.2.1) (2026-10-05)
 
 
