@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/emaarco/accio-brew/compare/v1.1.0...v1.2.0) (2026-10-05)
+
+
+### Features
+
+* drop the wrapper trigger, sync via launchd only ([#10](https://github.com/emaarco/accio-brew/issues/10)) ([ae080ed](https://github.com/emaarco/accio-brew/commit/ae080ed74910f81bc00773ea0551d50783cb343e))
+
 ## [1.1.0](https://github.com/emaarco/accio-brew/compare/v1.0.0...v1.1.0) (2026-10-05)
 
 
