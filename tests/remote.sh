@@ -44,3 +44,21 @@ remote_commit_count() {
 last_remote_commit() {
   git -C "$REMOTE" log -1 --format="$1" hosts/a
 }
+
+publish_file() {
+  local remote=$1 file=$2 checkout
+  checkout=$(target_checkout "$remote")
+  git init -q -b main "$checkout"
+  : > "$checkout/$file"
+  git -C "$checkout" add -- "$file"
+  git -C "$checkout" commit -q -m "chore: add empty $file"
+  git -C "$checkout" push -q "$remote" main
+}
+
+remote_has_branch() {
+  git -C "$REMOTE" rev-parse -q --verify "refs/heads/$1" >/dev/null
+}
+
+remote_commit() {
+  git -C "$REMOTE" rev-parse "$1"
+}

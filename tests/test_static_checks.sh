@@ -26,7 +26,7 @@ test_tool_passes_shellcheck() {
 test_fakes_pass_shellcheck() {
   PATH=$DEVELOPER_PATH
   command -v shellcheck >/dev/null || return 0
-  assert_exit 0 shellcheck "$TOOL_ROOT"/tests/fakes/brew "$TOOL_ROOT"/tests/fakes/scutil "$TOOL_ROOT"/tests/fakes/launchctl "$TOOL_ROOT"/tests/fakes/ssh "$TOOL_ROOT"/tests/fakes/recording-ssh "$TOOL_ROOT"/tests/fakes/optional/gum "$TOOL_ROOT"/tests/fakes/optional/gh
+  assert_exit 0 shellcheck "$TOOL_ROOT"/tests/fakes/brew "$TOOL_ROOT"/tests/fakes/scutil "$TOOL_ROOT"/tests/fakes/launchctl "$TOOL_ROOT"/tests/fakes/ssh "$TOOL_ROOT"/tests/fakes/recording-ssh "$TOOL_ROOT"/tests/fakes/optional/gum "$TOOL_ROOT"/tests/fakes/optional/gh "$TOOL_ROOT"/tests/fakes/optional/glab
 }
 
 test_test_suite_passes_shellcheck() {

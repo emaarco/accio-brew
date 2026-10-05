@@ -15,4 +15,8 @@ Syncs run in the background, so failures only show up in `~/Library/Logs/accio-b
 
 - **`no config found, run accio-brew init`** — this Mac is not set up yet.
 - **`local clone belongs to another repo`** — `REPO_URL` was edited by hand. Run `accio-brew init`.
-- **`target Brewfile not found on remote`** — the default branch has no file at `BREWFILE_PATH`.
+- **`target Brewfile not found on remote`** — the default branch has no file at `BREWFILE_PATH`. Run `accio-brew init` again to get a proposal for it.
+- **`github.com repos need gh`** · **`gitlab.com repos need glab`** — install the CLI and log in; the message shows the commands.
+- **`gh is not logged in`** · **`glab is not logged in`** — run `gh auth login` or `glab auth login`.
+- **`cannot push propose/<host-id>`** — this Mac may not push to `propose/*`, or the remote is unreachable.
+- **`cannot determine the default branch`** — the remote's `HEAD` points to a branch that does not exist. Set the default branch in your host's web UI.

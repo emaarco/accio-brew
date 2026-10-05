@@ -22,7 +22,7 @@ Keep the clone outside `~/Documents`, `~/Desktop` and `~/Downloads` — macOS bl
 
 ## Set up a Mac
 
-Create an empty private repository on the git host of your choice, then run:
+Create an empty private repository on the git host of your choice. For github.com install and log in `gh` (`brew install gh && gh auth login`), for gitlab.com `glab` (`brew install glab && glab auth login`) — `init` stops without them. Any other host needs nothing but git. Then run:
 
 ```sh
 accio-brew init
@@ -44,7 +44,10 @@ Repository (owner/name):
 1. checks that the repo is reachable without a password prompt,
 2. creates `main` with an empty Brewfile if the repo is empty,
 3. pushes this Mac's first dump to `hosts/<host-id>`,
-4. installs a launchd agent that syncs every hour and at login.
+4. installs a launchd agent that syncs every hour and at login,
+5. proposes this Mac's packages as `propose/<host-id>` while the target Brewfile is still empty, and opens the pull request for it on github.com and gitlab.com.
+
+Merge that request and `main` holds your first target. Later packages travel the same way with `accio-brew propose`.
 
 Self-hosted server? Choose `paste clone URL`.
 
@@ -68,4 +71,4 @@ Syncs run unattended and never prompt. `init` only accepts a repo URL that alrea
 
 - **Other repo** → `accio-brew init` again. Enter keeps the current value.
 - **Brewfile location inside the repo** → edit `BREWFILE_PATH` in `~/.config/accio-brew/config`.
-- **Stop using it** → `accio-brew teardown`, `brew uninstall accio-brew`, then delete `~/.local/share/accio-brew`, `~/.config/accio-brew` and your `hosts/<host-id>` branch.
+- **Stop using it** → `accio-brew teardown`, `brew uninstall accio-brew`, then delete `~/.local/share/accio-brew`, `~/.config/accio-brew` and your `hosts/<host-id>` and `propose/<host-id>` branches.

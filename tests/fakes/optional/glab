@@ -1,0 +1,13 @@
+#!/bin/bash
+echo "$*" >> "$HOME/glab.calls"
+case "$1 $2" in
+  "auth status") exit "${FAKE_CLI_AUTH_EXIT:-0}" ;;
+  "mr list")
+    if grep -q "mr create" "$HOME/glab.calls"; then
+      echo '[{"iid":1}]'
+    else
+      echo '[]'
+    fi
+    ;;
+  "mr create") echo https://gitlab.com/acme/brewfiles/-/merge_requests/1 ;;
+esac
