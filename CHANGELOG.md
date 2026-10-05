@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/emaarco/accio-brew/compare/v1.3.0...v1.4.0) (2026-10-05)
+
+
+### Features
+
+* record host packages on main through pull requests ([#16](https://github.com/emaarco/accio-brew/issues/16)) ([a721dd5](https://github.com/emaarco/accio-brew/commit/a721dd53f47a896bbfe123218fa57a065fcf9ee3))
+
 ## [1.3.0](https://github.com/emaarco/accio-brew/compare/v1.2.1...v1.3.0) (2026-10-05)
 
 
