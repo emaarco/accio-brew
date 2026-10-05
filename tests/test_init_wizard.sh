@@ -1,4 +1,5 @@
 test_wizard_builds_https_url_for_github() {
+  given_platform_clis_are_installed
   create_remote "$REMOTE"
   map_url_to "https://github.com/acme/brewfiles.git" "$REMOTE"
   answer_with 1 acme/brewfiles
@@ -7,6 +8,7 @@ test_wizard_builds_https_url_for_github() {
 }
 
 test_wizard_strips_slashes_and_git_suffix_from_repository() {
+  given_platform_clis_are_installed
   create_remote "$REMOTE"
   map_url_to "https://github.com/acme/brewfiles.git" "$REMOTE"
   answer_with 1 /acme/brewfiles.git
@@ -15,6 +17,7 @@ test_wizard_strips_slashes_and_git_suffix_from_repository() {
 }
 
 test_wizard_falls_back_to_ssh_url() {
+  given_platform_clis_are_installed
   create_remote "$REMOTE"
   map_url_to "git@gitlab.com:acme/brewfiles.git" "$REMOTE"
   map_url_to "https://gitlab.com/acme/brewfiles.git" "$SANDBOX/missing.git"

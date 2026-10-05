@@ -32,3 +32,26 @@ brew_calls() {
 launchctl_calls() {
   cat "$HOME/launchctl.calls"
 }
+
+propose() {
+  "$ACCIO_BREW" propose
+}
+
+given_platform_clis_are_installed() {
+  export PATH=$TOOL_ROOT/tests/fakes/optional:$PATH
+}
+
+given_initialised_host_on() {
+  create_remote "$REMOTE"
+  map_url_to "https://$1/acme/brewfiles.git" "$REMOTE"
+  given_platform_clis_are_installed
+  assert_exit 0 "$ACCIO_BREW" init --repo-url "https://$1/acme/brewfiles.git" </dev/null
+}
+
+gh_calls() {
+  cat "$HOME/gh.calls"
+}
+
+glab_calls() {
+  cat "$HOME/glab.calls"
+}

@@ -21,6 +21,7 @@ command_init() {
   command -v brew >/dev/null || fail "Homebrew is not installed"
   load_config_if_present
   choose_repo_url
+  require_platform_cli
   default_host_id
   prepare_probed_remote
   write_config
@@ -28,5 +29,6 @@ command_init() {
   link_binary
   command_sync
   install_launchd
+  propose_first_target
   echo "Done. Run 'accio-brew apply' to install the target Brewfile on this Mac."
 }

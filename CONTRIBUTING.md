@@ -26,12 +26,12 @@ Merging to `main` keeps a release pull request up to date via [release-please](h
 | `lib/` | One file per concern, e.g. `config.sh`, `clone.sh`, `sync.sh`, `apply.sh`, `repo_choice.sh`, `prompt_gum.sh`, `prompt_plain.sh`, `launchd_trigger.sh`. |
 | `modules/` | What gets installed on the Mac: the launchd plist template. |
 | `tests/test_*.sh` | Tests grouped by behaviour; every `test_*` function runs in its own sandbox. |
-| `tests/fakes/` | Stand-ins for `brew`, `scutil`, `launchctl`, `ssh` and `gum`. |
+| `tests/fakes/` | Stand-ins for `brew`, `scutil`, `launchctl`, `ssh`, `gum`, `gh` and `glab`. |
 | `docs/` | User documentation linked from the README. |
 
 ## House rules
 
-- **Plain git only.** No GitHub or GitLab API, no `gh`, no `glab`.
+- **Plain git for syncing.** `gh` and `glab` only open the request in `lib/platform.sh`; nothing else talks to a host API.
 - **bash 3.2.** `bin/` and `lib/` must run with the bash that ships with macOS.
 - **No comments.** Small functions with telling names instead.
 - **Small files.** A test fails when a file grows beyond 150 lines; split by responsibility.
