@@ -56,7 +56,7 @@ Run the diff in a checkout of the default branch.
 |---|---|
 | `~/.config/accio-brew/config` | `REPO_URL`, `BREWFILE_PATH`, `HOST_ID` |
 | `~/.local/share/accio-brew/repo` | The tool's clone of your data repo, checked out on `sync/<host-id>` |
-| `~/Library/Logs/accio-brew.log` | One line per sync event |
+| `~/Library/Logs/accio-brew.log` | One line per sync event, from the agent and from manual runs |
 
 ## Non-goals
 

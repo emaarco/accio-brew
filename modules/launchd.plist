@@ -20,8 +20,6 @@
   <true/>
   <key>ProcessType</key>
   <string>Background</string>
-  <key>StandardOutPath</key>
-  <string>__LOG__</string>
   <key>StandardErrorPath</key>
   <string>__LOG__</string>
 </dict>

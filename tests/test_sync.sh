@@ -36,6 +36,13 @@ test_sync_pushes_changed_state() {
   assert_contains 'brew "jq"' "$(remote_host_file a)"
 }
 
+test_manual_sync_is_recorded_in_log_file() {
+  given_initialised_host
+  set_installed git jq
+  assert_exit 0 sync
+  assert_contains "pushed" "$(cat "$HOME/Library/Logs/accio-brew.log")"
+}
+
 test_sync_replaces_unmerged_state() {
   given_initialised_host
   set_installed git jq
