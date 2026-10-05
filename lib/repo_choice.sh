@@ -22,11 +22,14 @@ probe_repository_on() {
   repo_path=${answer#/}
   repo_path=${repo_path%/}
   repo_path=${repo_path%.git}
+  probed_host=$host
+  probed_repository=$repo_path
   probe_candidates "https://$host/$repo_path.git" "git@$host:$repo_path.git"
 }
 
 probe_pasted_url() {
   ask_text "Clone URL"
+  probed_host=
   probe_candidates "$answer"
 }
 
@@ -52,6 +55,6 @@ choose_repo_url() {
   fi
   keeps_current_repo && return
   until ask_repo_url; do
-    echo "Cannot reach $probed_candidates. Create the repo in your host's web UI or check access."
+    explain_unreachable_repo
   done
 }
