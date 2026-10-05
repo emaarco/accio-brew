@@ -20,11 +20,6 @@ test_init_writes_default_brewfile_path() {
   assert_eq "./Brewfile" "$(config_value BREWFILE_PATH)"
 }
 
-test_init_writes_chosen_mode() {
-  given_initialised_host launchd
-  assert_eq "launchd" "$(config_value SYNC_MODE)"
-}
-
 test_init_derives_host_id_from_local_host_name() {
   export FAKE_HOST="Marcos MacBook"
   given_initialised_host

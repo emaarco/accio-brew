@@ -13,7 +13,7 @@ resolve_tool_root() {
 }
 
 usage() {
-  echo "usage: accio-brew init [--repo-url <url>] [--mode wrapper|launchd] | sync | apply [--cleanup] | teardown" >&2
+  echo "usage: accio-brew init [--repo-url <url>] | sync | apply [--cleanup] | teardown" >&2
   exit 1
 }
 

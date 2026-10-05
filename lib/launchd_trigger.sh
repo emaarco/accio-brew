@@ -17,6 +17,7 @@ render_launchd_plist() {
 }
 
 install_launchd() {
+  remove_launchd
   mkdir -p "$(dirname "$LAUNCHD_PLIST")" "$(dirname "$LOG_FILE")"
   render_launchd_plist > "$LAUNCHD_PLIST"
   launchctl bootstrap "gui/$(id -u)" "$LAUNCHD_PLIST" || fail "cannot load $LAUNCHD_PLIST"
