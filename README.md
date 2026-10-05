@@ -22,7 +22,7 @@ Each Mac only ever pushes to its own branch. Macs never conflict with each other
 ## ⚡ Install
 
 ```sh
-brew install --HEAD emaarco/tap/accio-brew
+brew install emaarco/tap/accio-brew
 accio-brew init
 ```
 
@@ -49,7 +49,7 @@ Onboarding a whole team? Skip the questions:
 accio-brew init --repo-url git@gitlab.example.com:team/brewfiles.git --mode launchd </dev/null
 ```
 
-Update with `brew upgrade --fetch-HEAD accio-brew`.
+Update with `brew upgrade accio-brew`.
 
 <details>
 <summary>Without the tap</summary>
