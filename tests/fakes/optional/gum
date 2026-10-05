@@ -1,0 +1,9 @@
+#!/bin/bash
+printf '%s\n' "$*" >> "$HOME/gum.calls"
+case $1 in
+  confirm) exit "${FAKE_GUM_EXIT:-0}" ;;
+  *)
+    printf '%s\n' "${FAKE_GUM_ANSWER:-}"
+    exit "${FAKE_GUM_EXIT:-0}"
+    ;;
+esac

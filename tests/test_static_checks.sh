@@ -30,11 +30,11 @@ test_tool_passes_shellcheck() {
 test_fakes_pass_shellcheck() {
   PATH=$DEVELOPER_PATH
   command -v shellcheck >/dev/null || return 0
-  assert_exit 0 shellcheck "$TOOL_ROOT"/tests/fakes/brew "$TOOL_ROOT"/tests/fakes/scutil "$TOOL_ROOT"/tests/fakes/launchctl "$TOOL_ROOT"/tests/fakes/ssh "$TOOL_ROOT"/tests/fakes/recording-accio-brew "$TOOL_ROOT"/tests/fakes/recording-ssh "$TOOL_ROOT"/tests/fakes/homebrew-prefix/bin/brew
+  assert_exit 0 shellcheck "$TOOL_ROOT"/tests/fakes/brew "$TOOL_ROOT"/tests/fakes/scutil "$TOOL_ROOT"/tests/fakes/launchctl "$TOOL_ROOT"/tests/fakes/ssh "$TOOL_ROOT"/tests/fakes/recording-accio-brew "$TOOL_ROOT"/tests/fakes/recording-ssh "$TOOL_ROOT"/tests/fakes/homebrew-prefix/bin/brew "$TOOL_ROOT"/tests/fakes/optional/gum
 }
 
 test_test_suite_passes_shellcheck() {
   PATH=$DEVELOPER_PATH
   command -v shellcheck >/dev/null || return 0
-  whole_test_suite | assert_exit 0 shellcheck --shell=bash --exclude=SC1090,SC1091,SC2329 -
+  whole_test_suite | assert_exit 0 shellcheck --shell=bash --exclude=SC1090,SC1091,SC2154,SC2329 -
 }

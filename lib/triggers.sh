@@ -18,6 +18,7 @@ install_trigger() {
 }
 
 link_binary() {
+  command -v accio-brew >/dev/null && return
   mkdir -p "$(dirname "$BINARY_LINK")"
   ln -sf "$TOOL_ROOT/bin/accio-brew" "$BINARY_LINK"
   case ":$PATH:" in

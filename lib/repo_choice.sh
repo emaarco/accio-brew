@@ -18,7 +18,7 @@ probe_candidates() {
 
 probe_repository_on() {
   local host=$1 repo_path
-  ask "Repository (owner/name): "
+  ask_text "Repository (owner/name)"
   repo_path=${answer#/}
   repo_path=${repo_path%/}
   repo_path=${repo_path%.git}
@@ -26,17 +26,13 @@ probe_repository_on() {
 }
 
 probe_pasted_url() {
-  ask "Clone URL: "
+  ask_text "Clone URL"
   probe_candidates "$answer"
 }
 
 ask_repo_url() {
-  echo "Where is your Brewfile repo?"
-  echo "  1) github.com"
-  echo "  2) gitlab.com"
-  echo "  3) paste clone URL"
-  ask "Choice [1]: " 1
-  case $answer in
+  ask_choice "Where is your Brewfile repo?" 1 github.com gitlab.com "paste clone URL"
+  case $choice in
     2) probe_repository_on gitlab.com ;;
     3) probe_pasted_url ;;
     *) probe_repository_on github.com ;;
@@ -46,10 +42,7 @@ ask_repo_url() {
 keeps_current_repo() {
   [ -n "${REPO_URL:-}" ] || return 1
   [ -n "$mode_flag" ] && return 0
-  ask "Keep repo $REPO_URL? [Y/n]: " y
-  case $answer in
-    n|N) return 1 ;;
-  esac
+  ask_yes_no "Keep repo $REPO_URL?"
 }
 
 choose_repo_url() {

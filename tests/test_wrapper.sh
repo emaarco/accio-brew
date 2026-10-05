@@ -1,10 +1,12 @@
 given_wrapped_brew() {
-  mkdir -p "$HOME/.local/bin"
-  ln -s "$TOOL_ROOT/tests/fakes/recording-accio-brew" "$HOME/.local/bin/accio-brew"
+  INSTALLED_TOOL=$SANDBOX/installed-tool
+  mkdir -p "$INSTALLED_TOOL/bin" "$INSTALLED_TOOL/modules"
+  cp "$TOOL_ROOT/modules/wrapper.zsh" "$INSTALLED_TOOL/modules/"
+  ln -s "$TOOL_ROOT/tests/fakes/recording-accio-brew" "$INSTALLED_TOOL/bin/accio-brew"
 }
 
 wrapped_brew() {
-  HOMEBREW_PREFIX=$TOOL_ROOT/tests/fakes/homebrew-prefix zsh -c 'source "$1"; shift; brew "$@"' wrapper "$TOOL_ROOT/modules/wrapper.zsh" "$@"
+  HOMEBREW_PREFIX=$TOOL_ROOT/tests/fakes/homebrew-prefix zsh -c 'source "$1"; shift; brew "$@"' wrapper "$INSTALLED_TOOL/modules/wrapper.zsh" "$@"
 }
 
 sync_was_triggered() {

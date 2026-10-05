@@ -17,7 +17,7 @@ usage() {
   exit 1
 }
 
-TOOL_ROOT=$(resolve_tool_root)
+TOOL_ROOT=${ACCIO_BREW_ROOT:-$(resolve_tool_root)}
 for library in "$TOOL_ROOT"/lib/*.sh; do
   source "$library"
 done

@@ -18,11 +18,10 @@ parse_init_flags() {
 ask_mode() {
   local default_choice=1
   [ "${SYNC_MODE:-}" = launchd ] && default_choice=2
-  echo "How should sync be triggered?"
-  echo "  1) wrapper  - after every brew install/uninstall/upgrade"
-  echo "  2) launchd  - hourly in the background"
-  ask "Choice [$default_choice]: " "$default_choice"
-  case $answer in
+  ask_choice "How should sync be triggered?" "$default_choice" \
+    "wrapper  - after every brew install/uninstall/upgrade" \
+    "launchd  - hourly in the background"
+  case $choice in
     2) SYNC_MODE=launchd ;;
     *) SYNC_MODE=wrapper ;;
   esac

@@ -13,6 +13,6 @@ host_branch_exists_on_remote() {
 confirm_host_id() {
   clone_matches_repo && return
   host_branch_exists_on_remote || return 0
-  ask "hosts/$HOST_ID exists. Name for this Mac [$HOST_ID]: " "$HOST_ID"
+  ask_text "hosts/$HOST_ID exists. Name for this Mac" "$HOST_ID"
   HOST_ID=$(as_host_id "$answer")
 }

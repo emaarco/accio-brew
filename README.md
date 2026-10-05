@@ -22,11 +22,11 @@ Each Mac only ever pushes to its own branch. Macs never conflict with each other
 ## ⚡ Install
 
 ```sh
-git clone https://github.com/emaarco/accio-brew.git ~/.local/share/accio-brew/tool
-~/.local/share/accio-brew/tool/bin/accio-brew init
+brew install --HEAD emaarco/tap/accio-brew
+accio-brew init
 ```
 
-`init` guides you through two questions:
+`init` guides you through two questions: where your data repo lives (github.com, gitlab.com or a pasted clone URL) and how sync should be triggered (`wrapper` or `launchd`). With [`gum`](https://github.com/charmbracelet/gum) installed — the formula recommends it — you pick with the arrow keys; without it, or with `brew install --without-gum`, you get plain numbered questions:
 
 ```
 Where is your Brewfile repo?
@@ -41,7 +41,7 @@ How should sync be triggered?
 Choice [1]:
 ```
 
-It checks that the repo is reachable without a password prompt, creates `main` with an empty Brewfile if the repo is empty, pushes this Mac's first dump and installs the trigger you chose. Self-hosted server? Choose `3` and paste the clone URL.
+It checks that the repo is reachable without a password prompt, creates `main` with an empty Brewfile if the repo is empty, pushes this Mac's first dump and installs the trigger you chose. Self-hosted server? Paste the clone URL.
 
 Onboarding a whole team? Skip the questions:
 
@@ -49,7 +49,19 @@ Onboarding a whole team? Skip the questions:
 accio-brew init --repo-url git@gitlab.example.com:team/brewfiles.git --mode launchd </dev/null
 ```
 
-Keep the tool outside `~/Documents`, `~/Desktop` and `~/Downloads` — macOS blocks background agents from reading those. Update with `git pull` in `~/.local/share/accio-brew/tool`.
+Update with `brew upgrade --fetch-HEAD accio-brew`.
+
+<details>
+<summary>Without the tap</summary>
+
+```sh
+git clone https://github.com/emaarco/accio-brew.git ~/.local/share/accio-brew/tool
+~/.local/share/accio-brew/tool/bin/accio-brew init
+```
+
+Keep the clone outside `~/Documents`, `~/Desktop` and `~/Downloads` — macOS blocks background agents from reading those. Update with `git pull`.
+
+</details>
 
 ## 📜 Usage
 
@@ -59,7 +71,7 @@ Keep the tool outside `~/Documents`, `~/Desktop` and `~/Downloads` — macOS blo
 | `accio-brew sync` | Dump the installed packages and push them to `hosts/<host-id>`. |
 | `accio-brew apply` | Install everything from the target Brewfile on `main`. Also upgrades what is already installed. |
 | `accio-brew apply --cleanup` | Additionally uninstall every tap, formula and cask that is not in the target. |
-| `accio-brew teardown` | Remove the trigger and the `~/.local/bin/accio-brew` link. |
+| `accio-brew teardown` | Remove the trigger. Run it before `brew uninstall accio-brew`. |
 
 > `apply --cleanup` is the vanishing spell: it removes software **without asking** and resets Homebrew's tap trust settings to the ones in the target Brewfile.
 
@@ -92,7 +104,7 @@ A host branch shares no history with `main`, so it cannot be merged into it. Tha
 
 - **Other repo or other trigger** → `accio-brew init` again. Enter keeps the current value.
 - **Brewfile location inside the repo** → edit `BREWFILE_PATH` in `~/.config/accio-brew/config`.
-- **Stop using it** → `accio-brew teardown`, then delete `~/.local/share/accio-brew`, `~/.config/accio-brew` and your `hosts/<host-id>` branch.
+- **Stop using it** → `accio-brew teardown`, `brew uninstall accio-brew`, then delete `~/.local/share/accio-brew`, `~/.config/accio-brew` and your `hosts/<host-id>` branch.
 
 ## 🔐 Background authentication
 
@@ -127,7 +139,7 @@ The same log answers how the two triggers compare:
 
 - No drift alarm — host branches are an inventory. Use the `git diff` above.
 - No Mac App Store apps, VS Code extensions or language packages — only taps, formulae and casks are dumped and cleaned up.
-- No host API, no pick-list of your repos, no repo creation. Plain git stays the only dependency.
+- No host API, no pick-list of your repos, no repo creation. Plain git stays the only hard dependency; `gum` only decorates the setup dialog and never runs during a sync.
 - No signed sync commits — a server rule that requires them rejects the pushes.
 - No privacy between Macs — everyone with access to the data repo sees what each Mac has installed, and every Mac needs push access to `hosts/*`.
 
@@ -147,10 +159,12 @@ tests/run.sh wrapper      # tests whose name contains "wrapper"
 | Path | Responsibility |
 |---|---|
 | `bin/accio-brew` | Entry point: loads `lib/` and dispatches the subcommand. |
-| `lib/` | One file per concern, e.g. `config.sh`, `clone.sh`, `sync.sh`, `apply.sh`, `repo_choice.sh`, `wrapper_trigger.sh`, `launchd_trigger.sh`. |
+| `lib/` | One file per concern, e.g. `config.sh`, `clone.sh`, `sync.sh`, `apply.sh`, `repo_choice.sh`, `prompt_gum.sh`, `prompt_plain.sh`, `wrapper_trigger.sh`, `launchd_trigger.sh`. |
 | `modules/` | What gets installed on the Mac: the zsh `brew` wrapper and the launchd plist template. |
 | `tests/test_*.sh` | Tests grouped by behaviour; every `test_*` function runs in its own sandbox. |
-| `tests/fakes/` | Stand-ins for `brew`, `scutil`, `launchctl` and `ssh` that are put first on `PATH`. |
+| `tests/fakes/` | Stand-ins for `brew`, `scutil`, `launchctl`, `ssh` and `gum`. |
+
+The formula lives in [`emaarco/homebrew-tap`](https://github.com/emaarco/homebrew-tap).
 
 The tests use local bare repositories and a temporary `HOME`. They need nothing beyond macOS; `shellcheck` is used when installed.
 
