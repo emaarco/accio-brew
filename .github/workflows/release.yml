@@ -79,11 +79,18 @@ jobs:
           grep -qF "url \"${TARBALL_URL}\"" "$FORMULA"
           grep -qF "sha256 \"${TARBALL_SHA256}\"" "$FORMULA"
 
-      - name: Push to the tap
+      - name: Merge the formula update through a pull request
+        env:
+          GH_TOKEN: ${{ steps.tap-token.outputs.token }}
         run: |
           set -euo pipefail
+          BRANCH="release/accio-brew-${VERSION}"
+          TITLE="chore: update accio-brew to ${VERSION}"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git switch -c "$BRANCH"
           git add "$FORMULA"
-          git commit -m "chore: update accio-brew to ${VERSION}"
-          git push
+          git commit -m "$TITLE"
+          git push --set-upstream origin "$BRANCH"
+          gh pr create --title "$TITLE" --body "Released in https://github.com/emaarco/accio-brew/releases/tag/${TAG}"
+          gh pr merge --squash --delete-branch
