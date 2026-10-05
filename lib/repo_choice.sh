@@ -44,7 +44,6 @@ ask_repo_url() {
 
 keeps_current_repo() {
   [ -n "${REPO_URL:-}" ] || return 1
-  [ -n "$mode_flag" ] && return 0
   ask_yes_no "Keep repo $REPO_URL?"
 }
 

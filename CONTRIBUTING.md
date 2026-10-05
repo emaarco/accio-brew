@@ -9,10 +9,10 @@ Bug reports, ideas and pull requests are welcome.
 
 ```sh
 tests/run.sh              # all tests
-tests/run.sh wrapper      # tests whose name contains "wrapper"
+tests/run.sh teardown     # tests whose name contains "teardown"
 ```
 
-The tests use fake binaries, local bare repositories and a temporary `HOME`. They never touch your real Homebrew, `~/.zshrc` or launchd, and need nothing beyond macOS. `shellcheck` is used when installed.
+The tests use fake binaries, local bare repositories and a temporary `HOME`. They never touch your real Homebrew or launchd, and need nothing beyond macOS. `shellcheck` is used when installed.
 
 ## Cut a release
 
@@ -23,8 +23,8 @@ Merging to `main` keeps a release pull request up to date via [release-please](h
 | Path | Responsibility |
 |---|---|
 | `bin/accio-brew` | Entry point: loads `lib/` and dispatches the subcommand. |
-| `lib/` | One file per concern, e.g. `config.sh`, `clone.sh`, `sync.sh`, `apply.sh`, `repo_choice.sh`, `prompt_gum.sh`, `prompt_plain.sh`, `wrapper_trigger.sh`, `launchd_trigger.sh`. |
-| `modules/` | What gets installed on the Mac: the zsh `brew` wrapper and the launchd plist template. |
+| `lib/` | One file per concern, e.g. `config.sh`, `clone.sh`, `sync.sh`, `apply.sh`, `repo_choice.sh`, `prompt_gum.sh`, `prompt_plain.sh`, `launchd_trigger.sh`. |
+| `modules/` | What gets installed on the Mac: the launchd plist template. |
 | `tests/test_*.sh` | Tests grouped by behaviour; every `test_*` function runs in its own sandbox. |
 | `tests/fakes/` | Stand-ins for `brew`, `scutil`, `launchctl`, `ssh` and `gum`. |
 | `docs/` | User documentation linked from the README. |

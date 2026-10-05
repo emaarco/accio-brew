@@ -13,7 +13,7 @@ brew install emaarco/tap/accio-brew
 accio-brew init
 ```
 
-`init` asks where your Brewfile repo lives and how to trigger the sync, then pushes this Mac's first dump. All you bring is an empty private repo. → [Getting started](./docs/getting-started.md)
+`init` asks where your Brewfile repo lives, pushes this Mac's first dump and schedules the hourly sync. All you bring is an empty private repo. → [Getting started](./docs/getting-started.md)
 
 The formula is served from the [`emaarco/homebrew-tap`](https://github.com/emaarco/homebrew-tap) repository.
 
@@ -30,19 +30,17 @@ Each Mac only pushes to its own branch — no conflicts between Macs, and `main`
 
 | Command | Does |
 |---|---|
-| `accio-brew init` | Guided setup. Cast it again to change the repo or the trigger. |
+| `accio-brew init` | Guided setup. Cast it again to change the repo. |
 | `accio-brew sync` | Dump the installed packages and push them to `hosts/<host-id>`. |
 | `accio-brew apply` | Install everything from the target Brewfile on `main`. |
 | `accio-brew apply --cleanup` | Also uninstall what is not in the target — **without asking**. |
-| `accio-brew teardown` | Remove the trigger. |
+| `accio-brew teardown` | Remove the launchd agent. |
 
-## ⏳ Triggers
+## ⏳ Trigger
 
-| `wrapper` | `launchd` |
-|---|---|
-| Syncs right after `brew install`, `uninstall` or `upgrade` in your zsh. | Syncs every hour in the background. |
+A launchd agent syncs every hour and at login, in the background.
 
-→ [Triggers compared](./docs/triggers.md) · [Troubleshooting](./docs/troubleshooting.md)
+→ [Troubleshooting](./docs/troubleshooting.md)
 
 ## 🤝 Contributing
 

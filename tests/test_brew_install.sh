@@ -10,15 +10,9 @@ given_tool_on_path() {
   export PATH=$SANDBOX/brew-bin:$PATH
 }
 
-test_wrapper_block_uses_stable_brew_path() {
-  given_tool_installed_by_brew
-  given_initialised_host wrapper
-  assert_contains "source $ACCIO_BREW_ROOT/modules/wrapper.zsh" "$(cat "$HOME/.zshrc")"
-}
-
 test_launchd_plist_uses_stable_brew_path() {
   given_tool_installed_by_brew
-  given_initialised_host launchd
+  given_initialised_host
   assert_contains "<string>$ACCIO_BREW_ROOT/bin/accio-brew</string>" "$(cat "$PLIST")"
 }
 

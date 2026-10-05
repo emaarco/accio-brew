@@ -1,3 +1,0 @@
-#!/bin/bash
-printf '%s\n' "$@" > "$HOME/brew.arguments"
-exit "${FAKE_BREW_EXIT:-0}"

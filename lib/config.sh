@@ -23,7 +23,6 @@ write_config() {
   {
     printf 'REPO_URL=%q\n' "$REPO_URL"
     printf 'BREWFILE_PATH=%q\n' "$BREWFILE_PATH"
-    printf 'SYNC_MODE=%q\n' "$SYNC_MODE"
     printf 'HOST_ID=%q\n' "$HOST_ID"
   } > "$CONFIG_FILE"
 }

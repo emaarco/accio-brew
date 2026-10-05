@@ -15,5 +15,4 @@ Syncs run in the background, so failures only show up in `~/Library/Logs/accio-b
 
 - **`no config found, run accio-brew init`** — this Mac is not set up yet.
 - **`local clone belongs to another repo`** — `REPO_URL` was edited by hand. Run `accio-brew init`.
-- **`incomplete accio-brew block in ~/.zshrc`** — one of the two marker lines is missing. Remove the block by hand, then run `accio-brew init` again.
 - **`target Brewfile not found on remote`** — the default branch has no file at `BREWFILE_PATH`.

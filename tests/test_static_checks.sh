@@ -7,10 +7,6 @@ whole_test_suite() {
   cat "$tests/assertions.sh" "$tests/sandbox.sh" "$tests/remote.sh" "$tests/accio_brew.sh" "$tests"/test_*.sh "$tests/run.sh"
 }
 
-test_wrapper_module_is_valid_zsh() {
-  assert_exit 0 zsh -n "$TOOL_ROOT/modules/wrapper.zsh"
-}
-
 test_launchd_template_is_valid_plist() {
   assert_exit 0 plutil -lint "$TOOL_ROOT/modules/launchd.plist"
 }
@@ -30,7 +26,7 @@ test_tool_passes_shellcheck() {
 test_fakes_pass_shellcheck() {
   PATH=$DEVELOPER_PATH
   command -v shellcheck >/dev/null || return 0
-  assert_exit 0 shellcheck "$TOOL_ROOT"/tests/fakes/brew "$TOOL_ROOT"/tests/fakes/scutil "$TOOL_ROOT"/tests/fakes/launchctl "$TOOL_ROOT"/tests/fakes/ssh "$TOOL_ROOT"/tests/fakes/recording-accio-brew "$TOOL_ROOT"/tests/fakes/recording-ssh "$TOOL_ROOT"/tests/fakes/homebrew-prefix/bin/brew "$TOOL_ROOT"/tests/fakes/optional/gum "$TOOL_ROOT"/tests/fakes/optional/gh
+  assert_exit 0 shellcheck "$TOOL_ROOT"/tests/fakes/brew "$TOOL_ROOT"/tests/fakes/scutil "$TOOL_ROOT"/tests/fakes/launchctl "$TOOL_ROOT"/tests/fakes/ssh "$TOOL_ROOT"/tests/fakes/recording-ssh "$TOOL_ROOT"/tests/fakes/optional/gum "$TOOL_ROOT"/tests/fakes/optional/gh
 }
 
 test_test_suite_passes_shellcheck() {

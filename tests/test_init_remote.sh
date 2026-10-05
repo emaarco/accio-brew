@@ -24,7 +24,7 @@ test_init_lets_second_mac_pick_another_name() {
   enter_home twin
   export FAKE_HOST=a
   answer_with "Office Mac"
-  assert_exit 0 init_with_answers --repo-url "$REMOTE" --mode wrapper
+  assert_exit 0 init_with_answers --repo-url "$REMOTE"
   assert_eq "office-mac" "$(config_value HOST_ID)"
 }
 
