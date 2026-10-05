@@ -148,4 +148,12 @@ tests/run.sh              # all tests
 tests/run.sh wrapper      # tests whose name contains "wrapper"
 ```
 
-The tests run against fake `brew`, `scutil` and `launchctl` binaries, local bare repositories and a temporary `HOME`. They need nothing beyond macOS; `shellcheck` is used when installed.
+| Path | Responsibility |
+|---|---|
+| `bin/accio-brew` | Entry point: loads `lib/` and dispatches the subcommand. |
+| `lib/` | One file per concern, e.g. `config.sh`, `clone.sh`, `sync.sh`, `apply.sh`, `repo_choice.sh`, `wrapper_trigger.sh`, `launchd_trigger.sh`. |
+| `modules/` | What gets installed on the Mac: the zsh `brew` wrapper and the launchd plist template. |
+| `tests/test_*.sh` | Tests grouped by behaviour; every `test_*` function runs in its own sandbox. |
+| `tests/fakes/` | Stand-ins for `brew`, `scutil`, `launchctl` and `ssh` that are put first on `PATH`. |
+
+The tests use local bare repositories and a temporary `HOME`. They need nothing beyond macOS; `shellcheck` is used when installed.
