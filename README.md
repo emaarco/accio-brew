@@ -15,6 +15,8 @@ accio-brew init
 
 `init` asks where your Brewfile repo lives and how to trigger the sync, then pushes this Mac's first dump. All you bring is an empty private repo. → [Getting started](./docs/getting-started.md)
 
+The formula is served from the [`emaarco/homebrew-tap`](https://github.com/emaarco/homebrew-tap) repository.
+
 ## 🪄 The spell
 
 | Branch in your repo | Its `Brewfile` holds | Written by |
