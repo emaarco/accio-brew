@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/emaarco/accio-brew/compare/v1.2.0...v1.2.1) (2026-10-05)
+
+
+### Bug Fixes
+
+* **ci:** update the tap through a pull request ([#12](https://github.com/emaarco/accio-brew/issues/12)) ([ff17572](https://github.com/emaarco/accio-brew/commit/ff17572a1f6537cb45738b514331ab6f0189d7a4))
+
 ## [1.2.0](https://github.com/emaarco/accio-brew/compare/v1.1.0...v1.2.0) (2026-10-05)
 
 
