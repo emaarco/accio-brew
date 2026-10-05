@@ -1,0 +1,89 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run (open no PR, create no release, leave the tap alone)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.rp.outputs.release_created }}
+      tag_name: ${{ steps.rp.outputs.tag_name }}
+      version: ${{ steps.rp.outputs.version }}
+    steps:
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        id: app-token
+        with:
+          client-id: ${{ vars.RELEASE_PLEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_PLEASE_APP_PRIVATE_KEY }}
+
+      - id: rp
+        uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+          dry-run: ${{ inputs.dry_run == true }}
+
+  update-tap:
+    name: Update Homebrew tap
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created == 'true' && inputs.dry_run != true }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      TAG: ${{ needs.release-please.outputs.tag_name }}
+      VERSION: ${{ needs.release-please.outputs.version }}
+      FORMULA: Formula/accio-brew.rb
+    steps:
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        id: tap-token
+        with:
+          client-id: ${{ vars.RELEASE_PLEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_PLEASE_APP_PRIVATE_KEY }}
+          owner: emaarco
+          repositories: homebrew-tap
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: emaarco/homebrew-tap
+          token: ${{ steps.tap-token.outputs.token }}
+
+      - name: Point the formula at the released tarball
+        run: |
+          set -euo pipefail
+          TARBALL_URL="https://github.com/emaarco/accio-brew/archive/refs/tags/${TAG}.tar.gz"
+          curl -fsSL -o release.tar.gz "$TARBALL_URL"
+          TARBALL_SHA256=$(sha256sum release.tar.gz | awk '{print $1}')
+          rm release.tar.gz
+          sed -i -E \
+            -e "s|^  url \".*\"$|  url \"${TARBALL_URL}\"|" \
+            -e "s|^  sha256 \".*\"$|  sha256 \"${TARBALL_SHA256}\"|" \
+            "$FORMULA"
+          grep -qF "url \"${TARBALL_URL}\"" "$FORMULA"
+          grep -qF "sha256 \"${TARBALL_SHA256}\"" "$FORMULA"
+
+      - name: Push to the tap
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "$FORMULA"
+          git commit -m "chore: update accio-brew to ${VERSION}"
+          git push

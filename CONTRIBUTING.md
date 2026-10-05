@@ -14,6 +14,10 @@ tests/run.sh wrapper      # tests whose name contains "wrapper"
 
 The tests use fake binaries, local bare repositories and a temporary `HOME`. They never touch your real Homebrew, `~/.zshrc` or launchd, and need nothing beyond macOS. `shellcheck` is used when installed.
 
+## Cut a release
+
+Merging to `main` keeps a release pull request up to date via [release-please](https://github.com/googleapis/release-please). Merging that pull request tags `vX.Y.Z`, publishes the GitHub release and points `url` and `sha256` of the formula in [`emaarco/homebrew-tap`](https://github.com/emaarco/homebrew-tap) at the new tarball. Everything else in the formula is edited in the tap by hand.
+
 ## Find your way around
 
 | Path | Responsibility |
