@@ -82,6 +82,11 @@ test_sync_opens_merge_request_on_gitlab() {
   assert_contains "mr create --source-branch sync/a --target-branch main --title chore: record packages of a" "$(glab_calls)"
 }
 
+test_sync_describes_request_as_changed_packages() {
+  given_initialised_host_on github.com
+  assert_contains "--body Accio Brewfile! The installed packages on a have changed, and this request records the new state." "$(gh_calls)"
+}
+
 test_sync_again_keeps_single_pull_request() {
   given_initialised_host_on github.com
   set_installed git jq
