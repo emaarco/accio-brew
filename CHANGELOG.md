@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.2](https://github.com/emaarco/accio-brew/compare/v1.4.1...v1.4.2) (2026-10-06)
+
+
+### Bug Fixes
+
+* describe sync requests as changed packages ([#20](https://github.com/emaarco/accio-brew/issues/20)) ([0fcbf2f](https://github.com/emaarco/accio-brew/commit/0fcbf2f2db8a4bb8f112f919d178aee9b0d18eaa))
+
 ## [1.4.1](https://github.com/emaarco/accio-brew/compare/v1.4.0...v1.4.1) (2026-10-05)
 
 
