@@ -62,7 +62,7 @@ request_host_file_change() {
   git_as_tool -C "$CLONE" commit -q -m "$title"
   push_sync_branch
   REQUEST_BRANCH=$SYNC_BRANCH
-  open_request "$CLONE" "$title" "Installed packages on $HOST_ID." || stop_sync_because request-failed
+  open_request "$CLONE" "$title" "Accio Brewfile! The installed packages on $HOST_ID have changed, and this request records the new state." || stop_sync_because request-failed
 }
 
 stop_sync_because() {
