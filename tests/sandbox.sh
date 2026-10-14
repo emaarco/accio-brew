@@ -20,14 +20,32 @@ setup_sandbox() {
   trap 'rm -rf "$SANDBOX"' EXIT
   export PATH=$TOOL_ROOT/tests/fakes:/usr/bin:/bin:/usr/sbin:/sbin
   export FAKE_INSTALLED=$SANDBOX/installed
+  export FAKE_DEPENDENCIES=$SANDBOX/dependencies
+  export FAKE_REQUESTED=$SANDBOX/requested
+  export FAKE_CASKS=$SANDBOX/casks
   use_isolated_git_config
   enter_home a
   set_installed git
+  set_dependencies "git:"
+  set_requested git
+  : > "$FAKE_CASKS"
   REMOTE=$SANDBOX/remote.git
 }
 
 set_installed() {
   printf 'brew "%s"\n' "$@" > "$FAKE_INSTALLED"
+}
+
+set_dependencies() {
+  printf '%s\n' "$@" > "$FAKE_DEPENDENCIES"
+}
+
+set_requested() {
+  printf '%s\n' "$@" > "$FAKE_REQUESTED"
+}
+
+set_casks() {
+  printf '%s\n' "$@" > "$FAKE_CASKS"
 }
 
 answer_with() {

@@ -18,6 +18,19 @@ case "$1 $2" in
     cp "$FAKE_INSTALLED" "$file"
     leave_lingering_child
     ;;
+  "deps --installed")
+    cat "$FAKE_DEPENDENCIES"
+    ;;
+  "leaves --installed-on-request")
+    cat "$FAKE_REQUESTED"
+    ;;
+  "list --cask")
+    if [ "$3" = --full-name ]; then
+      cat "$FAKE_CASKS"
+    else
+      sed 's|.*/||' "$FAKE_CASKS"
+    fi
+    ;;
   "bundle install")
     cp "$file" "$HOME/installed.target"
     exit "${FAKE_INSTALL_EXIT:-0}"

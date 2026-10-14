@@ -11,6 +11,7 @@
 |---|---|---|
 | `Brewfile` | the target: what a Mac *should* have | you, by merging requests from `propose/<host-id>` |
 | `hosts/<host-id>/Brewfile` | what that Mac *has* installed | you, by merging requests from `sync/<host-id>` |
+| `hosts/<host-id>/brew-graph.md` | why that Mac has each package: its dependency graph | you, by merging requests from `sync/<host-id>` |
 
 A sync runs `brew bundle dump` for taps, formulae and casks and compares the result with this Mac's file on the default branch. Without a difference it stops. Otherwise it rebuilds `sync/<host-id>` from the default branch, commits the dump as `chore: record packages of <host-id>`, pushes the branch and opens the request for it. Each Mac writes only its own file, so requests of different Macs never conflict.
 
@@ -29,6 +30,16 @@ The sync is triggered by a launchd agent in `~/Library/LaunchAgents/io.accio-bre
 `apply --cleanup` additionally runs `brew bundle cleanup --force` for taps, formulae and casks. It removes software without asking and resets Homebrew's tap trust settings to the ones in the target Brewfile.
 
 Earlier versions pushed each dump to a branch `hosts/<host-id>`. Those branches are no longer written or read. Remove them with `git push origin --delete hosts/<host-id>`.
+
+## Seeing why a package is installed
+
+```sh
+accio-brew graph
+```
+
+`graph` prints the dependencies of every installed formula and cask as a Mermaid flowchart in Markdown, which GitHub and GitLab render. Arrows point from a package to its direct dependencies, from `brew deps --installed --direct`. Packages installed on request — `brew leaves --installed-on-request` and all casks — are highlighted, so following the arrows backwards from any package leads to the reason it is there.
+
+Every sync writes the same graph to `hosts/<host-id>/brew-graph.md` and commits it with the host Brewfile, so a changed graph alone also opens a request. The graph is generated: edit the Brewfile, not the graph. When `brew deps` fails, the sync logs `graph-failed`, keeps the graph from the default branch and records the Brewfile anyway.
 
 ## Maintaining the target
 
