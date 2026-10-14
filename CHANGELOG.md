@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/emaarco/accio-brew/compare/v1.4.2...v1.5.0) (2026-10-14)
+
+
+### Features
+
+* show why each package is installed as a dependency graph ([#23](https://github.com/emaarco/accio-brew/issues/23)) ([89c7f53](https://github.com/emaarco/accio-brew/commit/89c7f53dd49cc6cd59d9535510bb6c66e2d3c686)), closes [#22](https://github.com/emaarco/accio-brew/issues/22)
+
 ## [1.4.2](https://github.com/emaarco/accio-brew/compare/v1.4.1...v1.4.2) (2026-10-06)
 
 
