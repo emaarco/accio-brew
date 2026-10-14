@@ -23,6 +23,7 @@ The formula is served from the [`emaarco/homebrew-tap`](https://github.com/emaar
 |---|---|---|
 | `Brewfile` | the target: what a Mac *should* have | you, by merging the requests `propose` opens |
 | `hosts/<host-id>/Brewfile` | what that Mac *has* installed | you, by merging the requests the sync opens |
+| `hosts/<host-id>/brew-graph.md` | why that Mac has each package | the same requests, generated |
 
 Each Mac only pushes to its own branches, `sync/<host-id>` and `propose/<host-id>` — no conflicts between Macs, and `main` can stay protected. → [How it works](./docs/how-it-works.md)
 
@@ -35,6 +36,7 @@ Each Mac only pushes to its own branches, `sync/<host-id>` and `propose/<host-id
 | `accio-brew propose` | Open a pull request that adds this Mac's extra packages to the target. |
 | `accio-brew apply` | Install everything from the target Brewfile on `main`. |
 | `accio-brew apply --cleanup` | Also uninstall what is not in the target — **without asking**. |
+| `accio-brew graph` | Print why each package is installed, as a Mermaid dependency graph. Every sync records it in `hosts/<host-id>/brew-graph.md`. |
 | `accio-brew teardown` | Remove the launchd agent. |
 
 ## ⏳ Trigger

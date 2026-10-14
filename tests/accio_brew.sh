@@ -12,6 +12,10 @@ sync() {
   "$ACCIO_BREW" sync
 }
 
+graph() {
+  "$ACCIO_BREW" graph
+}
+
 given_initialised_host() {
   create_remote "$REMOTE"
   assert_exit 0 init_with_flags

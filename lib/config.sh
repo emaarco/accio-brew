@@ -11,6 +11,7 @@ load_config() {
   [ -n "${REPO_URL:-}" ] && [ -n "${HOST_ID:-}" ] || fail "incomplete config, run accio-brew init"
   apply_config_defaults
   HOST_FILE=hosts/$HOST_ID/Brewfile
+  GRAPH_FILE=hosts/$HOST_ID/brew-graph.md
   SYNC_BRANCH=sync/$HOST_ID
 }
 

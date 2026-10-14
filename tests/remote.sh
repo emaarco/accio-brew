@@ -45,6 +45,10 @@ remote_host_file() {
   git -C "$REMOTE" show "sync/$1:hosts/$1/Brewfile"
 }
 
+remote_graph_file() {
+  git -C "$REMOTE" show "sync/$1:hosts/$1/brew-graph.md"
+}
+
 merge_sync_request() {
   git -C "$REMOTE" update-ref refs/heads/main "refs/heads/sync/$1"
 }

@@ -31,6 +31,18 @@ update_host_brewfile() {
   fi
 }
 
+update_host_graph() {
+  local graph
+  graph=$(mktemp)
+  if write_dependency_graph > "$graph"; then
+    mv "$graph" "$CLONE/$GRAPH_FILE"
+    git_in_clone add -- "$GRAPH_FILE"
+  else
+    rm -f "$graph"
+    log graph-failed
+  fi
+}
+
 host_file_is_unchanged() {
   git_in_clone add -- "$HOST_FILE"
   git_in_clone diff --cached --quiet
@@ -81,6 +93,7 @@ command_sync() {
   resolve_target_branch
   checkout_sync_branch
   update_host_brewfile || stop_sync_because dump-failed
+  update_host_graph
   request_host_file_change
   log "done $((SECONDS - started_at))s"
 }

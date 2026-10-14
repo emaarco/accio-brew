@@ -23,7 +23,7 @@ Merging to `main` keeps a release pull request up to date via [release-please](h
 | Path | Responsibility |
 |---|---|
 | `bin/accio-brew` | Entry point: loads `lib/` and dispatches the subcommand. |
-| `lib/` | One file per concern, e.g. `config.sh`, `clone.sh`, `sync.sh`, `apply.sh`, `repo_choice.sh`, `prompt_gum.sh`, `prompt_plain.sh`, `launchd_trigger.sh`. |
+| `lib/` | One file per concern, e.g. `config.sh`, `clone.sh`, `sync.sh`, `graph.sh`, `apply.sh`, `repo_choice.sh`, `prompt_gum.sh`, `prompt_plain.sh`, `launchd_trigger.sh`. |
 | `modules/` | What gets installed on the Mac: the launchd plist template. |
 | `tests/test_*.sh` | Tests grouped by behaviour; every `test_*` function runs in its own sandbox. |
 | `tests/fakes/` | Stand-ins for `brew`, `scutil`, `launchctl`, `ssh`, `gum`, `gh` and `glab`. |
